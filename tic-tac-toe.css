@@ -2,9 +2,12 @@ body{
     display: flex;
     flex-flow: column;
 }
-.info{
+h1{
     text-align: center;
-    font-size: 24pt;
+}
+.infoView{
+    text-align: center;
+    font-size: 22pt;
 }
 .gameView{
     display: flex;
