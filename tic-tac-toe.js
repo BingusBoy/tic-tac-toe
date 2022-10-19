@@ -2,22 +2,21 @@
 const gameInfo = (() => {
   // Here is where changing and getting info happens
   const view = document.getElementsByClassName("boardSpace");
-  const info = document.querySelector(".infoView")
+  const info = document.querySelector(".infoView");
   let currentPlayer = "";
 
-
-  const showInfo = (text) =>{
+  const showInfo = (text) => {
     info.textContent = text;
   };
 
   const showCurrentPlayer = () => {
-    showInfo(`${gameInfo.currentPlayer}'s turn`)
-  }
+    showInfo(`${gameInfo.currentPlayer}'s turn`);
+  };
 
   const showWinner = () => {
-    showInfo(`${gameInfo.currentPlayer} wins!`)
-  }
-  
+    showInfo(`${gameInfo.currentPlayer} wins!`);
+  };
+
   const hasPlaced = [
     false,
     false,
@@ -29,7 +28,6 @@ const gameInfo = (() => {
     false,
     false,
   ];
-
 
   const getStartPlayer = () => {
     if (Math.floor(Math.random() * 2) == 0) {
@@ -45,7 +43,7 @@ const gameInfo = (() => {
     } else if (getCurrentPlayer() == "O") {
       gameInfo.currentPlayer = "X";
     }
-    showCurrentPlayer()
+    showCurrentPlayer();
   };
 
   const getCurrentPlayer = () => gameInfo.currentPlayer;
@@ -59,8 +57,8 @@ const gameInfo = (() => {
   };
 
   const updateSpace = (e) => {
-    if (gameController.isInProgress == "false"){
-      return
+    if (gameController.isInProgress == "false") {
+      return;
     }
     let i = parseInt(e.target.getAttribute("boardIndex"));
     if (hasPlaced[i] == false) {
@@ -72,13 +70,10 @@ const gameInfo = (() => {
   };
 
   const clearView = () => {
-
     for (let i = 0; i < view.length; i++) {
-      view[i].textContent= "";
+      view[i].textContent = "";
     }
-
   };
-  
 
   return {
     getState,
@@ -94,7 +89,6 @@ const gameInfo = (() => {
   };
 })();
 
-
 const gameController = (() => {
   // Here is where the game flow is determined
   let isInProgress = false;
@@ -102,69 +96,72 @@ const gameController = (() => {
   const resetButton = document.querySelector(".reset");
 
   const nextTurn = () => {
-    if(isInProgress == false){
-      return
+    if (isInProgress == false) {
+      return;
     }
     gameInfo.changePlayer();
-    gameInfo.showCurrentPlayer()
+    gameInfo.showCurrentPlayer();
   };
 
   const conditionCheck = () => {
-    let state = gameInfo.getState()
-    let placed = 0
+    let state = gameInfo.getState();
+    let placed = 0;
     //Check if all placed
     for (let i = 0; i < gameInfo.hasPlaced.length; i++) {
-      if(gameInfo.hasPlaced[i] == true){
-        placed++
+      if (gameInfo.hasPlaced[i] == true) {
+        placed++;
       }
     }
-    if (placed == 9){
+    if (placed == 9) {
       isInProgress = false;
-      gameInfo.showInfo("Draw!")
+      gameInfo.showInfo("Draw!");
     }
     // Check rows
     for (let i = 0; i <= 2; i++) {
-      if(state[i][0] == gameInfo.currentPlayer 
-        && state[i][1] == gameInfo.currentPlayer
-        && state[i][2] == gameInfo.currentPlayer){
-      gameInfo.showWinner()
-      isInProgress = false
-     }
+      if (
+        state[i][0] == gameInfo.currentPlayer &&
+        state[i][1] == gameInfo.currentPlayer &&
+        state[i][2] == gameInfo.currentPlayer
+      ) {
+        gameInfo.showWinner();
+        isInProgress = false;
+      }
     }
     // Check columns
-    for(let i = 0; i <= 2; i++){
-      if(state[0][i] == gameInfo.currentPlayer 
-        && state[1][i] == gameInfo.currentPlayer
-        && state[2][i] == gameInfo.currentPlayer){
-          gameInfo.showWinner()
-          isInProgress = false;
-        }
+    for (let i = 0; i <= 2; i++) {
+      if (
+        state[0][i] == gameInfo.currentPlayer &&
+        state[1][i] == gameInfo.currentPlayer &&
+        state[2][i] == gameInfo.currentPlayer
+      ) {
+        gameInfo.showWinner();
+        isInProgress = false;
+      }
     }
-  }
+  };
 
   const initializeGame = () => {
     gameInfo.currentPlayer = gameInfo.getStartPlayer();
-    
+
     for (let i = 0; i < view.length; i++) {
       view[i].addEventListener("click", gameInfo.updateSpace);
     }
-    
+
     resetButton.addEventListener("click", resetGame);
-    gameInfo.showCurrentPlayer()
+    gameInfo.showCurrentPlayer();
     isInProgress = true;
   };
 
   const resetGame = () => {
-    gameInfo.clearView()
+    gameInfo.clearView();
     for (let i = 0; i < gameInfo.hasPlaced.length; i++) {
-      gameInfo.hasPlaced[i] = false
+      gameInfo.hasPlaced[i] = false;
     }
 
-   initializeGame()
+    initializeGame();
+  };
 
-  }
-
-  return { initializeGame, nextTurn, resetGame, conditionCheck};
+  return { initializeGame, nextTurn, resetGame, conditionCheck };
 })();
 
 gameController.initializeGame();
